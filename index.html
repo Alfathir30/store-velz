@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Store - Produk Digital Premium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header animate-fade-in">
+            <div class="logo">
+                <span class="logo-icon">🛒</span>
+                Digital Store
+            </div>
+            <button class="check-manual-link" onclick="openCheckStatusModal()">
+                Cek Transaksi Manual
+            </button>
+        </header>
+
+        <section class="hero-section animate-slide-up">
+            <div class="hero-content">
+                <h1 class="hero-title">Produk Digital Premium</h1>
+                <p class="hero-description">
+                    Tingkatkan skill dan pengetahuan Anda dengan produk digital berkualitas tinggi
+                </p>
+                <div class="hero-badge">
+                    <span class="badge-icon">⚡</span>
+                    Pembayaran Mudah dengan QRIS
+                </div>
+            </div>
+            <div class="hero-decoration">
+                <div class="floating-element floating-1"></div>
+                <div class="floating-element floating-2"></div>
+                <div class="floating-element floating-3"></div>
+            </div>
+        </section>
+
+        <section class="products-section">
+            <div class="section-header animate-fade-in">
+                <h2>Pilih Produk Terbaik</h2>
+                <p>Investasi terbaik untuk masa depan karir Anda</p>
+            </div>
+
+            <div class="product-grid">
+                <div class="product-card animate-slide-up" style="--delay: 0.1s;">
+                    <div class="product-header">
+                        <div class="product-icon">💻</div>
+                        <div class="product-badge">Populer</div>
+                    </div>
+                    <h3>Belajar Coding</h3>
+                    <p class="product-description">
+                        Kursus lengkap pemrograman web dari dasar hingga mahir dengan project nyata
+                    </p>
+                    <div class="product-features">
+                        <span>✓ 50+ Video Tutorial</span>
+                        <span>✓ Source Code</span>
+                        <span>✓ Sertifikat</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="price-label">Harga</span>
+                        <span class="price-value">Rp 150.000</span>
+                    </div>
+                    <button class="btn-primary" onclick="beliProduk('Belajar Coding', 150000)">
+                        <span>Beli Sekarang</span>
+                        <span class="btn-arrow">→</span>
+                    </button>
+                </div>
+
+                <div class="product-card animate-slide-up" style="--delay: 0.2s;">
+                    <div class="product-header">
+                        <div class="product-icon">📚</div>
+                    </div>
+                    <h3>Ebook JavaScript</h3>
+                    <p class="product-description">
+                        Panduan lengkap JavaScript untuk pemula dan menengah dengan contoh praktis
+                    </p>
+                    <div class="product-features">
+                        <span>✓ 200+ Halaman</span>
+                        <span>✓ Code Examples</span>
+                        <span>✓ Bonus Cheatsheet</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="price-label">Harga</span>
+                        <span class="price-value">Rp 75.000</span>
+                    </div>
+                    <button class="btn-primary" onclick="beliProduk('Ebook JavaScript', 75000)">
+                        <span>Beli Sekarang</span>
+                        <span class="btn-arrow">→</span>
+                    </button>
+                </div>
+
+                <div class="product-card animate-slide-up" style="--delay: 0.3s;">
+                    <div class="product-header">
+                        <div class="product-icon">💬</div>
+                        <div class="product-badge exclusive">Eksklusif</div>
+                    </div>
+                    <h3>Akses Grup Telegram</h3>
+                    <p class="product-description">
+                        Akses eksklusif ke grup diskusi developer premium dengan mentor berpengalaman
+                    </p>
+                    <div class="product-features">
+                        <span>✓ 24/7 Support</span>
+                        <span>✓ Daily Tips</span>
+                        <span>✓ Job Opportunities</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="price-label">Harga</span>
+                        <span class="price-value">Rp 50.000</span>
+                    </div>
+                    <button class="btn-primary" onclick="beliProduk('Akses Grup Telegram', 50000)">
+                        <span>Beli Sekarang</span>
+                        <span class="btn-arrow">→</span>
+                    </button>
+                </div>
+
+                <div class="product-card animate-slide-up" style="--delay: 0.4s;">
+                    <div class="product-header">
+                        <div class="product-icon">👨‍💼</div>
+                        <div class="product-badge premium">Premium</div>
+                    </div>
+                    <h3>Mentoring 1-on-1</h3>
+                    <p class="product-description">
+                        Sesi mentoring personal dengan expert developer untuk accelerate learning
+                    </p>
+                    <div class="product-features">
+                        <span>✓ 2 Jam Session</span>
+                        <span>✓ Personal Guidance</span>
+                        <span>✓ Career Roadmap</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="price-label">Harga</span>
+                        <span class="price-value">Rp 200.000</span>
+                    </div>
+                    <button class="btn-primary" onclick="beliProduk('Mentoring 1-on-1', 200000)">
+                        <span>Beli Sekarang</span>
+                        <span class="btn-arrow">→</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer animate-fade-in">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <span class="logo-icon">🛒</span>
+                        Digital Store
+                    </div>
+                    <p>Investasi terbaik untuk masa depan digital Anda</p>
+                </div>
+                <div class="footer-info">
+                    <p>&copy; 2024 Digital Store. Semua hak dilindungi.</p>
+                    <p>Pembayaran aman dengan QRIS</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Payment Modal -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-content">
+            <button class="close-button" onclick="closeModal()">×</button>
+            <h2 id="modalTitle">Proses Pembayaran QRIS</h2>
+
+            <div id="paymentLoading" class="loading-container">
+                <div class="loading-spinner"></div>
+                <p>Memproses pembayaran...</p>
+            </div>
+
+            <div class="qr-container" style="display: none;" id="qrContent">
+                <div class="qr-header">
+                    <h3>Scan QR Code</h3>
+                    <p>Gunakan aplikasi mobile banking atau e-wallet Anda</p>
+                </div>
+
+                <div class="qr-image-container">
+                    <img id="qrCodeImage" src="/placeholder.svg" alt="QRIS Code" />
+                </div>
+
+                <div class="transaction-info">
+                    <div class="info-item" id="transactionIdText" style="display: none;">
+                        <span class="info-label">ID Transaksi:</span>
+                        <span class="info-value" id="transactionIdDisplay"></span>
+                    </div>
+                    <div class="info-item" id="paymentStatusText" style="display: none;">
+                        <span class="info-label">Status:</span>
+                        <span class="info-value" id="paymentStatusResult">Menunggu...</span>
+                    </div>
+                </div>
+
+                <button id="cancelPaymentButton" class="btn-secondary" onclick="cancelPayment()" style="display: none;">
+                    Batalkan Pembayaran
+                </button>
+            </div>
+
+            <div id="finalContent" class="success-content" style="display: none;">
+                <div class="success-icon">🎉</div>
+                <h3>Pembayaran Berhasil!</h3>
+                <p>Terima kasih atas pembelian Anda</p>
+
+                <div class="access-info">
+                    <p>Silakan akses produk Anda:</p>
+                    <a id="accessLink" href="#" target="_blank" class="btn-success">
+                        <span>Akses Sekarang</span>
+                        <span class="btn-arrow">→</span>
+                    </a>
+                </div>
+
+                <div class="transaction-final">
+                    <p>ID Transaksi Anda:</p>
+                    <span id="finalTransactionIdDisplay"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Check Status Modal -->
+    <div class="modal" id="checkStatusModal">
+        <div class="modal-content">
+            <button class="close-button" onclick="closeCheckStatusModal()">×</button>
+            <h2>Cek Status Pembayaran</h2>
+            <p>Masukkan ID Transaksi untuk memeriksa status pembayaran Anda</p>
+
+            <div class="input-group">
+                <input type="text" id="inputTransactionIdCheck" placeholder="Masukkan ID Transaksi" class="form-input" />
+                <button class="btn-primary" onclick="checkPaymentStatusFromModal()">Cek Status</button>
+            </div>
+
+            <div id="checkedStatusResultModal" class="status-result"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
