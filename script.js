@@ -81,7 +81,7 @@ const productDatabase = {
       id: "bug-gojek",
       name: "Bug Gojek Voucher",
       description: "Cara mendapatkan voucher Gojek gratis melalui bug aplikasi",
-      price: 45000,
+      price: 1000,
       features: ["Multiple Vouchers", "Easy Steps", "Video Guide", "Success Guarantee"],
       icon: "🏍️",
       badge: "Terbaru",
@@ -92,7 +92,7 @@ const productDatabase = {
       id: "followers-ig",
       name: "Instagram Followers",
       description: "Tambah followers Instagram real dan aktif dengan kualitas terbaik",
-      price: 15, // per 1000 followers
+      price: 38, // per follower (Rp 380 per 10 followers)
       features: ["Real Followers", "No Drop", "Fast Delivery", "Lifetime Guarantee"],
       icon: "📸",
       badge: "Real",
@@ -102,7 +102,7 @@ const productDatabase = {
       id: "followers-tiktok",
       name: "TikTok Followers",
       description: "Boost followers TikTok dengan akun real dan engagement tinggi",
-      price: 12, // per 1000 followers
+      price: 28, // per follower (Rp 280 per 10 followers)
       features: ["High Quality", "Fast Process", "No Ban Risk", "24/7 Support"],
       icon: "🎵",
       badge: "Fast",
@@ -112,7 +112,7 @@ const productDatabase = {
       id: "followers-twitter",
       name: "Twitter Followers",
       description: "Increase Twitter followers dengan akun berkualitas dan aktif",
-      price: 20, // per 1000 followers
+      price: 20, // per follower
       features: ["Premium Quality", "Organic Growth", "Safe Method", "Refill Guarantee"],
       icon: "🐦",
       badge: "Premium",
@@ -139,6 +139,8 @@ const checkStatusModal = document.getElementById("checkStatusModal")
 document.addEventListener("DOMContentLoaded", () => {
   loadProducts("semua")
   initializeAnimations()
+  // Initialize calculator with default values
+  calculatePrice()
 })
 
 // Category Functions
@@ -155,6 +157,8 @@ function filterProducts(category) {
   if (category === "suntik-followers") {
     followersCalculator.style.display = "block"
     sectionTitle.textContent = "Layanan Suntik Followers"
+    // Recalculate when showing calculator
+    setTimeout(() => calculatePrice(), 100)
   } else {
     followersCalculator.style.display = "none"
     sectionTitle.textContent =
@@ -227,38 +231,91 @@ function createProductCard(product, index) {
   return card
 }
 
-// Followers Calculator
+// Followers Calculator - FIXED VERSION
 function calculatePrice() {
-  const platform = document.getElementById("platformSelect").value
-  const amount = Number.parseInt(document.getElementById("followersAmount").value) || 1000
+  const platformSelect = document.getElementById("platformSelect")
+  const followersAmountInput = document.getElementById("followersAmount")
+  const calculatedPriceElement = document.getElementById("calculatedPrice")
+  const selectedPlatformElement = document.getElementById("selectedPlatform")
+  const selectedAmountElement = document.getElementById("selectedAmount")
 
-  const rates = {
-    instagram: 15,
-    tiktok: 12,
-    twitter: 20,
+  // Check if elements exist
+  if (
+    !platformSelect ||
+    !followersAmountInput ||
+    !calculatedPriceElement ||
+    !selectedPlatformElement ||
+    !selectedAmountElement
+  ) {
+    console.log("Calculator elements not found")
+    return
   }
 
-  const pricePerK = rates[platform] || 15
-  const totalPrice = Math.ceil(amount / 1000) * pricePerK * 1000
+  const platform = platformSelect.value
+  let amount = Number.parseInt(followersAmountInput.value) || 10
 
-  document.getElementById("calculatedPrice").textContent = `Rp ${totalPrice.toLocaleString()}`
-  document.getElementById("followersSlider").value = amount
-}
+  console.log("Platform:", platform, "Amount:", amount) // Debug log
 
-function syncSlider() {
-  const sliderValue = document.getElementById("followersSlider").value
-  document.getElementById("followersAmount").value = sliderValue
-  calculatePrice()
+  // Enforce minimum 10 and round to nearest 10
+  if (amount < 10) {
+    amount = 10
+    followersAmountInput.value = 10
+  }
+
+  // Round to nearest 10
+  amount = Math.round(amount / 10) * 10
+  followersAmountInput.value = amount
+
+  // Price rates per follower
+  const rates = {
+    instagram: 38, // Rp 380 per 10 followers = Rp 38 per follower
+    tiktok: 28, // Rp 280 per 10 followers = Rp 28 per follower
+    twitter: 20, // Rp 200 per 10 followers = Rp 20 per follower
+  }
+
+  const pricePerFollower = rates[platform] || 38
+  const totalPrice = amount * pricePerFollower
+
+  console.log("Price per follower:", pricePerFollower, "Total price:", totalPrice) // Debug log
+
+  // Update display elements
+  calculatedPriceElement.textContent = `Rp ${totalPrice.toLocaleString()}`
+
+  // Platform name mapping
+  const platformNames = {
+    instagram: "Instagram",
+    tiktok: "TikTok",
+    twitter: "Twitter",
+  }
+
+  selectedPlatformElement.textContent = platformNames[platform] || "Instagram"
+  selectedAmountElement.textContent = `${amount.toLocaleString()} followers`
+
+  console.log("Updated display - Platform:", platformNames[platform], "Amount:", amount, "Price:", totalPrice) // Debug log
 }
 
 function buyFollowers() {
   const platform = document.getElementById("platformSelect").value
-  const amount = Number.parseInt(document.getElementById("followersAmount").value) || 1000
-  const totalPrice = Math.ceil(amount / 1000) * (platform === "instagram" ? 15 : platform === "tiktok" ? 12 : 20) * 1000
+  const amount = Number.parseInt(document.getElementById("followersAmount").value) || 10
+
+  const rates = {
+    instagram: 38, // Rp 38 per follower
+    tiktok: 28, // Rp 28 per follower
+    twitter: 20, // Rp 20 per follower
+  }
+
+  const pricePerFollower = rates[platform] || 38
+  const totalPrice = amount * pricePerFollower
+
+  const platformNames = {
+    instagram: "Instagram",
+    tiktok: "TikTok",
+    twitter: "Twitter",
+  }
 
   selectedProduct = {
     id: `followers-${platform}`,
-    name: `${platform.charAt(0).toUpperCase() + platform.slice(1)} Followers - ${amount.toLocaleString()}`,
+    name: `${platformNames[platform]} Followers - ${amount.toLocaleString()}`,
     price: totalPrice,
     type: "followers",
     platform: platform,
