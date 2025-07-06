@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Telegram Bot - Digital Store</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f7fa;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #2d3748;
+            margin-bottom: 20px;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 10px 5px;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .loading {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        .step {
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 6px;
+            border-left: 3px solid #28a745;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 Test Telegram Bot Integration</h1>
+        
+        <div class="test-section">
+            <h3>📋 Checklist Setup Telegram Bot</h3>
+            <div class="step">
+                <strong>1. Buat Bot Baru</strong>
+                <p>• Chat @BotFather di Telegram</p>
+                <p>• Kirim /newbot</p>
+                <p>• Ikuti instruksi untuk nama bot</p>
+                <p>• Simpan token yang diberikan</p>
+            </div>
+            
+            <div class="step">
+                <strong>2. Dapatkan Chat ID</strong>
+                <p>• Tambahkan bot ke grup/channel ATAU chat pribadi dengan bot</p>
+                <p>• Kirim pesan ke bot</p>
+                <p>• Buka: https://api.telegram.org/bot&lt;YOUR_BOT_TOKEN&gt;/getUpdates</p>
+                <p>• Cari "chat":{"id": dalam response</p>
+            </div>
+            
+            <div class="step">
+                <strong>3. Set Environment Variables di Netlify</strong>
+                <p>• TELEGRAM_BOT_TOKEN = token dari BotFather</p>
+                <p>• TELEGRAM_CHAT_ID = ID chat/grup</p>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>🧪 Test Functions</h3>
+            <button class="btn" onclick="testTelegramBot()">Test Telegram Bot</button>
+            <button class="btn" onclick="testOrderNotification()">Test Order Notification</button>
+            <button class="btn" onclick="checkEnvironmentVars()">Check Environment Variables</button>
+            
+            <div id="testResult" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>📝 Manual Test Order</h3>
+            <p>Test dengan membuat pesanan palsu untuk melihat apakah notifikasi Telegram terkirim:</p>
+            
+            <div style="display: grid; gap: 10px; margin: 20px 0;">
+                <input type="text" id="testProductName" placeholder="Nama Produk" value="Test Instagram Followers - 100">
+                <input type="number" id="testPrice" placeholder="Harga" value="3800">
+                <input type="text" id="testCustomerName" placeholder="Nama Customer" value="John Doe">
+                <input type="text" id="testCustomerContact" placeholder="Kontak Customer" value="08123456789">
+                <input type="text" id="testAccountInfo" placeholder="Username Target" value="@johndoe">
+            </div>
+            
+            <button class="btn" onclick="createTestOrder()">Buat Test Order</button>
+        </div>
+
+        <div class="test-section">
+            <h3>🔧 Troubleshooting</h3>
+            <div class="step">
+                <strong>Bot Tidak Merespon:</strong>
+                <p>• Pastikan TELEGRAM_BOT_TOKEN benar</p>
+                <p>• Cek apakah bot masih aktif di @BotFather</p>
+                <p>• Pastikan bot tidak di-block</p>
+            </div>
+            
+            <div class="step">
+                <strong>Pesan Tidak Masuk:</strong>
+                <p>• Pastikan TELEGRAM_CHAT_ID benar</p>
+                <p>• Jika grup: pastikan bot sudah di-add ke grup</p>
+                <p>• Jika channel: pastikan bot adalah admin</p>
+            </div>
+            
+            <div class="step">
+                <strong>Error 403 Forbidden:</strong>
+                <p>• Bot belum di-start oleh user</p>
+                <p>• Kirim /start ke bot terlebih dahulu</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showResult(message, type = 'info') {
+            const resultDiv = document.getElementById('testResult');
+            resultDiv.style.display = 'block';
+            resultDiv.className = `result ${type}`;
+            resultDiv.textContent = message;
+        }
+
+        async function testTelegramBot() {
+            showResult('Testing Telegram bot...', 'loading');
+            
+            try {
+                const response = await fetch('/.netlify/functions/test-telegram', {
+                    method: 'POST'
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    showResult(`✅ Test berhasil!\n\n${JSON.stringify(data.results, null, 2)}`, 'success');
+                } else {
+                    showResult(`❌ Test gagal:\n\n${JSON.stringify(data, null, 2)}`, 'error');
+                }
+            } catch (error) {
+                showResult(`❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function testOrderNotification() {
+            showResult('Testing order notification...', 'loading');
+            
+            const testOrder = {
+                product_name: 'Test Instagram Followers - 100',
+                price: 3800,
+                customer_name: 'Test Customer',
+                customer_contact: '08123456789',
+                account_info: '@testuser',
+                customer_notes: 'Test order notification',
+                product_type: 'followers',
+                platform: 'instagram',
+                amount: '100'
+            };
+
+            try {
+                const response = await fetch('/.netlify/functions/process-payment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams(testOrder)
+                });
+
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    showResult(`✅ Test order berhasil dibuat!\n\nTransaction ID: ${data.atlantic_transaction_id}\n\nCek Telegram untuk notifikasi.`, 'success');
+                } else {
+                    showResult(`❌ Test order gagal:\n\n${JSON.stringify(data, null, 2)}`, 'error');
+                }
+            } catch (error) {
+                showResult(`❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function createTestOrder() {
+            showResult('Creating test order...', 'loading');
+            
+            const testOrder = {
+                product_name: document.getElementById('testProductName').value,
+                price: document.getElementById('testPrice').value,
+                customer_name: document.getElementById('testCustomerName').value,
+                customer_contact: document.getElementById('testCustomerContact').value,
+                account_info: document.getElementById('testAccountInfo').value,
+                customer_notes: 'Manual test order',
+                product_type: 'followers',
+                platform: 'instagram',
+                amount: '100'
+            };
+
+            try {
+                const response = await fetch('/.netlify/functions/process-payment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams(testOrder)
+                });
+
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    showResult(`✅ Test order berhasil!\n\nTransaction ID: ${data.atlantic_transaction_id}\nQR Image: ${data.qr_image_url}\n\nCek Telegram untuk notifikasi!`, 'success');
+                } else {
+                    showResult(`❌ Test order gagal:\n\n${JSON.stringify(data, null, 2)}`, 'error');
+                }
+            } catch (error) {
+                showResult(`❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        function checkEnvironmentVars() {
+            showResult('Environment variables akan dicek di server logs.\n\nCek Netlify Functions logs untuk melihat status TELEGRAM_BOT_TOKEN dan TELEGRAM_CHAT_ID.', 'info');
+        }
+    </script>
+</body>
+</html>
