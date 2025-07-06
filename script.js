@@ -81,11 +81,20 @@ const productDatabase = {
       id: "Delay-invis",
       name: "Delay Invisible",
       description: "Membuat Wa Target Delay",
-      price: 500,
-      features: ["Kirim Chat Delay", "Nguras Paket Data"],
-      icon: "🏍️",
+      price: 5000,
+      features: ["Target Kirim Chat Delay", "Nguras Paket Data"],
+      icon: "⏳",
       badge: "Terbaru",
     },
+    {
+      id: "MurBug",
+      name: "Murid Bug",
+      description: "Dapat Akses Bot Bug Telegram TREDICT INVICTUS",
+      price: 20000,
+      features: ["Tinggal Pakai"],
+      icon: "</>",
+      badge: "Terbaru",
+    }
   ],
   "suntik-followers": [
     {
