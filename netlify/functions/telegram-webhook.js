@@ -1,7 +1,7 @@
 const fetch = require("node-fetch")
 
 const FIREBASE_DATABASE_URL = process.env.FIREBASE_DATABASE_URL || "https://store-velz-default-rtdb.firebaseio.com"
-const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || ""
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || "8111172635:AAG6nTMKB-Mj4aZDEHn4ldC6sjB-FH8-zQs"
 
 exports.handler = async (event, context) => {
   const headers = {
