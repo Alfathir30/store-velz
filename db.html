@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cek Data Transaksi Digital Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 32px;
+            color: #4a00e0;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+        p {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+            text-align: left;
+        }
+        input[type="text"] {
+            width: calc(100% - 22px); /* Account for padding */
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 17px;
+            width: auto;
+            display: inline-block;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        #resultDisplay {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border: 1px dashed #ced4da;
+            border-radius: 8px;
+            text-align: left;
+            word-wrap: break-word; /* Ensure long text breaks */
+            overflow-x: auto; /* For horizontal scroll if content is too wide */
+        }
+        #resultDisplay pre {
+            white-space: pre-wrap; /* Preserve whitespace and break lines */
+            word-wrap: break-word;
+        }
+        #resultDisplay p {
+            margin: 5px 0;
+            font-size: 15px;
+            color: #444;
+        }
+        #resultDisplay strong {
+            color: #4a00e0;
+        }
+        .status-success { color: green; font-weight: bold; }
+        .status-pending { color: orange; font-weight: bold; }
+        .status-expired, .status-failed, .status-canceled { color: red; font-weight: bold; }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+            }
+            h1 {
+                font-size: 26px;
+            }
+            .btn-primary {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cek Data Transaksi</h1>
+        <p>Masukkan ID Transaksi (Atlantic ID) untuk melihat detail:</p>
+        
+        <label for="transactionIdInput">ID Transaksi:</label>
+        <input type="text" id="transactionIdInput" placeholder="Contoh: ATxxxxx">
+        
+        <button class="btn-primary" onclick="checkTransaction()">Cek Transaksi</button>
+        
+        <div id="resultDisplay">
+            <p>Hasil akan ditampilkan di sini.</p>
+        </div>
+    </div>
+
+    <script>
+        async function checkTransaction() {
+            const transactionId = document.getElementById('transactionIdInput').value.trim();
+            const resultDisplay = document.getElementById('resultDisplay');
+            resultDisplay.innerHTML = '<p>Mengecek data...</p>';
+
+            if (!transactionId) {
+                resultDisplay.innerHTML = '<p style="color: red;">Mohon masukkan ID Transaksi.</p>';
+                return;
+            }
+
+            try {
+                const response = await fetch('/.netlify/functions/check-payment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `transaction_id=${encodeURIComponent(transactionId)}`,
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    let statusClass = '';
+                    if (data.payment_status === 'success') {
+                        statusClass = 'status-success';
+                    } else if (data.payment_status === 'pending') {
+                        statusClass = 'status-pending';
+                    } else {
+                        statusClass = 'status-expired'; // for expired, failed, canceled
+                    }
+
+                    let htmlContent = `
+                        <p>ID Transaksi: <strong>${transactionId}</strong></p>
+                        <p>Produk: <strong>${data.product_name}</strong></p>
+                        <p>Status Pembayaran: <strong class="${statusClass}">${data.payment_status.toUpperCase()}</strong></p>
+                    `;
+
+                    // Only show access link if it's not a generic placeholder
+                    if (data.access_link && data.access_link !== '#' && !data.access_link.includes('wa.me')) { // Exclude placeholder and direct WhatsApp links
+                         htmlContent += `<p>Link Akses: <a href="${data.access_link}" target="_blank">${data.access_link}</a></p>`;
+                    } else if (data.payment_status === 'success' && data.access_link.includes('wa.me')) {
+                         htmlContent += `<p>Link Kontak Pembeli (WA): <a href="${data.access_link}" target="_blank">Klik untuk Hubungi Pembeli</a></p>`;
+                    } else if (data.payment_status === 'success') {
+                         htmlContent += `<p>Link Akses: <strong>Akan dikirimkan secara manual/cek email.</strong></p>`;
+                    }
+
+                    // Tambahkan detail lain dari JSON response jika ada dan relevan
+                    if (data.buyer_notes) { // 'buyer_notes' should come from check_payment.php now
+                        htmlContent += `<p>Catatan Pembeli: <strong>${data.buyer_notes}</strong></p>`;
+                    } else {
+                        htmlContent += `<p>Catatan Pembeli: <strong>Tidak ada.</strong></p>`;
+                    }
+                    
+                    // Ini untuk menampilkan semua data mentah JSON (opsional, bisa dihapus kalau nggak mau)
+                    htmlContent += `
+                        <h3>Detail Data (JSON Mentah):</h3>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+
+                    resultDisplay.innerHTML = htmlContent;
+
+                } else {
+                    resultDisplay.innerHTML = `<p style="color: red;">Error: ${data.message || 'Transaksi tidak ditemukan atau terjadi kesalahan.'}</p>`;
+                }
+            } catch (error) {
+                resultDisplay.innerHTML = `<p style="color: red;">Terjadi kesalahan saat mengambil data: ${error.message}</p>`;
+                console.error('Fetch error:', error);
+            }
+        }
+    </script>
+</body>
+</html>
