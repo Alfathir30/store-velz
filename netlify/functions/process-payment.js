@@ -6,8 +6,8 @@ const ATLANTIC_API_KEY =
   "atIjCYZqOkNwQf379v0gmmdSpzfJUvHBMW93oQ9dxBqCjilCzvbqGhrn11BRVo3bkceD9adBMXHpt6tC3oWisS3j710deVVbctk1"
 const ATLANTIC_API_URL = "https://atlantich2h.com"
 const FIREBASE_DATABASE_URL = process.env.FIREBASE_DATABASE_URL || "https://store-velz-default-rtdb.firebaseio.com"
-const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || ""
-const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || ""
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || "8111172635:AAG6nTMKB-Mj4aZDEHn4ldC6sjB-FH8-zQs"
+const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || "1937864089"
 
 // Secret product links - store these as environment variables in production
 const secretProductLinks = {
