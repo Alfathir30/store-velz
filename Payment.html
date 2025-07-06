@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembayaran Produk Custom Nominal (QRIS)</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f2f5;
+            margin: 0;
+            color: #333;
+        }
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 450px;
+        }
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="number"], select {
+            width: calc(100% - 20px);
+            padding: 12px 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #loadingSpinner {
+            display: none; /* Sembunyikan default */
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #007bff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            margin: 15px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        #qrisInfo {
+            margin-top: 25px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        #qrisImage {
+            max-width: 200px;
+            height: auto;
+            margin: 20px auto;
+            display: block;
+            border: 1px solid #ddd;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        .hidden {
+            display: none;
+        }
+        .message {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border-color: #bee5eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Pesan Produk & Bayar via QRIS</h2>
+        <p>Pilih produk atau masukkan nama custom, tentukan nominal, lalu bayar pakai QRIS.</p>
+
+        <div class="input-group">
+            <label for="productSelect">Pilih Produk:</label>
+            <select id="productSelect" onchange="updateProductInput()">
+                <option value="">-- Pilih atau Masukkan Nama Custom --</option>
+                <option value="Belajar Coding">Belajar Coding</option>
+                <option value="Ebook JavaScript">Ebook JavaScript</option>
+                <option value="Akses Grup Telegram">Akses Grup Telegram</option>
+                <option value="Mentoring 1-on-1">Mentoring 1-on-1</option>
+                <option value="Custom Product">Lainnya (Custom)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label for="productNameInput">Nama Produk (Custom):</label>
+            <input type="text" id="productNameInput" placeholder="Masukkan nama produk custom (jika dipilih)" disabled>
+        </div>
+
+        <div class="input-group">
+            <label for="priceInput">Nominal Pembayaran (Rp):</label>
+            <input type="number" id="priceInput" placeholder="Contoh: 75000" min="1000" step="1000">
+        </div>
+
+        <button id="payButton" onclick="processPayment()">Proses Pembayaran</button>
+        <div id="loadingSpinner"></div>
+        <div id="message" class="message hidden"></div>
+
+        <div id="qrisInfo" class="hidden">
+            <h3>Pindai QRIS Ini untuk Pembayaran:</h3>
+            <img id="qrisImage" src="/placeholder.svg" alt="QRIS Code">
+            <p><strong>ID Transaksi Anda:</strong> <span id="transactionIdDisplay"></span></p>
+            <p class="info">Setelah pembayaran berhasil, link akses akan otomatis dikirim (cek email/WA/notifikasi lain dari sistem Anda) atau hubungi admin dengan ID Transaksi ini.</p>
+        </div>
+    </div>
+
+    <script>
+        const productSelect = document.getElementById('productSelect');
+        const productNameInput = document.getElementById('productNameInput');
+        const priceInput = document.getElementById('priceInput');
+        const payButton = document.getElementById('payButton');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const messageDiv = document.getElementById('message');
+        const qrisInfoDiv = document.getElementById('qrisInfo');
+        const qrisImage = document.getElementById('qrisImage');
+        const transactionIdDisplay = document.getElementById('transactionIdDisplay');
+
+        // Fungsi untuk mengupdate input nama produk berdasarkan pilihan dropdown
+        function updateProductInput() {
+            if (productSelect.value === 'Custom Product') {
+                productNameInput.disabled = false;
+                productNameInput.value = ''; // Kosongkan jika custom
+            } else {
+                productNameInput.disabled = true;
+                productNameInput.value = productSelect.value; // Isi dengan nama produk terpilih
+            }
+        }
+
+        // Jalankan saat halaman pertama kali load untuk set default
+        updateProductInput();
+
+        async function processPayment() {
+            // Reset tampilan sebelumnya
+            messageDiv.textContent = '';
+            messageDiv.className = 'message hidden';
+            qrisInfoDiv.classList.add('hidden');
+            qrisImage.src = '';
+            transactionIdDisplay.textContent = '';
+            
+            let selectedProductName = productSelect.value;
+            let finalProductName;
+
+            // Tentukan nama produk yang akan dikirim
+            if (selectedProductName === 'Custom Product') {
+                finalProductName = productNameInput.value.trim();
+                if (!finalProductName) {
+                    showMessage('error', 'Silakan masukkan nama produk custom.');
+                    return;
+                }
+            } else if (selectedProductName === '') {
+                 showMessage('error', 'Silakan pilih produk atau masukkan nama custom.');
+                 return;
+            } else {
+                finalProductName = selectedProductName;
+            }
+
+            const price = parseInt(priceInput.value);
+
+            if (isNaN(price) || price <= 0) {
+                showMessage('error', 'Nominal pembayaran tidak valid. Masukkan angka positif.');
+                return;
+            }
+
+            // Tampilkan loading spinner dan nonaktifkan tombol
+            payButton.disabled = true;
+            loadingSpinner.style.display = 'block';
+            showMessage('info', 'Memproses pembayaran, harap tunggu...');
+
+            // Data yang akan dikirim ke PHP
+            const formData = new FormData();
+            formData.append('product_name', finalProductName);
+            formData.append('price', price);
+
+            try {
+                const response = await fetch('/.netlify/functions/process-payment', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    showMessage('success', data.message);
+                    qrisImage.src = data.qr_image_url;
+                    transactionIdDisplay.textContent = data.atlantic_transaction_id;
+                    qrisInfoDiv.classList.remove('hidden');
+                } else {
+                    showMessage('error', data.message || 'Terjadi kesalahan saat memproses pembayaran.');
+                    console.error('API Error:', data);
+                }
+            } catch (error) {
+                showMessage('error', 'Terjadi kesalahan jaringan atau server. Coba lagi nanti.');
+                console.error('Fetch Error:', error);
+            } finally {
+                // Sembunyikan loading spinner dan aktifkan tombol kembali
+                loadingSpinner.style.display = 'none';
+                payButton.disabled = false;
+            }
+        }
+
+        function showMessage(type, text) {
+            messageDiv.textContent = text;
+            messageDiv.className = `message ${type}`;
+            messageDiv.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

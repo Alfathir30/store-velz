@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Store - Produk Digital Premium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header animate-fade-in">
+            <div class="logo">
+                <span class="logo-icon">🛒</span>
+                Digital Store
+            </div>
+            <button class="check-manual-link" onclick="openCheckStatusModal()">
+                Cek Status Pesanan
+            </button>
+        </header>
+
+        <section class="hero-section animate-slide-up">
+            <div class="hero-content">
+                <h1 class="hero-title">Produk Digital Premium</h1>
+                <p class="hero-description">
+                    Tingkatkan skill dan bisnis Anda dengan produk digital berkualitas tinggi
+                </p>
+                <div class="hero-badge">
+                    <span class="badge-icon">⚡</span>
+                    Pembayaran Mudah dengan QRIS
+                </div>
+            </div>
+            <div class="hero-decoration">
+                <div class="floating-element floating-1"></div>
+                <div class="floating-element floating-2"></div>
+                <div class="floating-element floating-3"></div>
+            </div>
+        </section>
+
+        <!-- Category Filter -->
+        <section class="category-section">
+            <div class="category-header">
+                <h2>Pilih Kategori</h2>
+                <p>Temukan produk sesuai kebutuhan Anda</p>
+            </div>
+            <div class="category-tabs">
+                <button class="category-tab active" data-category="semua" onclick="filterProducts('semua')">
+                    <span class="tab-icon">🌟</span>
+                    Semua
+                </button>
+                <button class="category-tab" data-category="ebook" onclick="filterProducts('ebook')">
+                    <span class="tab-icon">📚</span>
+                    E-Book
+                </button>
+                <button class="category-tab" data-category="apk" onclick="filterProducts('apk')">
+                    <span class="tab-icon">📱</span>
+                    APK Premium
+                </button>
+                <button class="category-tab" data-category="jasa-bug" onclick="filterProducts('jasa-bug')">
+                    <span class="tab-icon">🐛</span>
+                    Jasa Bug
+                </button>
+                <button class="category-tab" data-category="suntik-followers" onclick="filterProducts('suntik-followers')">
+                    <span class="tab-icon">👥</span>
+                    Suntik Followers
+                </button>
+            </div>
+        </section>
+
+        <!-- Followers Calculator (Hidden by default) -->
+        <section class="followers-calculator" id="followersCalculator" style="display: none;">
+            <div class="calculator-card">
+                <h3>🎯 Kalkulator Suntik Followers</h3>
+                <p>Tentukan jumlah followers yang ingin ditambahkan</p>
+                
+                <div class="calculator-form">
+                    <div class="input-group">
+                        <label>Platform:</label>
+                        <select id="platformSelect" onchange="calculatePrice()">
+                            <option value="instagram">Instagram</option>
+                            <option value="tiktok">TikTok</option>
+                            <option value="twitter">Twitter</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Jumlah Followers:</label>
+                        <input type="number" id="followersAmount" min="100" max="100000" step="100" value="1000" oninput="calculatePrice()">
+                        <div class="slider-container">
+                            <input type="range" id="followersSlider" min="100" max="100000" step="100" value="1000" oninput="syncSlider()">
+                        </div>
+                    </div>
+                    
+                    <div class="price-display">
+                        <div class="price-label">Estimasi Harga:</div>
+                        <div class="price-value" id="calculatedPrice">Rp 15.000</div>
+                    </div>
+                    
+                    <button class="btn-primary" onclick="buyFollowers()">
+                        <span>Beli Sekarang</span>
+                        <span class="btn-arrow">→</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="products-section">
+            <div class="section-header animate-fade-in">
+                <h2 id="sectionTitle">Semua Produk Terbaik</h2>
+                <p>Investasi terbaik untuk masa depan digital Anda</p>
+            </div>
+
+            <div class="product-grid" id="productGrid">
+                <!-- Products will be dynamically loaded here -->
+            </div>
+        </section>
+
+        <footer class="footer animate-fade-in">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <span class="logo-icon">🛒</span>
+                        Digital Store
+                    </div>
+                    <p>Investasi terbaik untuk masa depan digital Anda</p>
+                </div>
+                <div class="footer-info">
+                    <p>&copy; 2024 Digital Store. Semua hak dilindungi.</p>
+                    <p>Pembayaran aman dengan QRIS</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Purchase Modal -->
+    <div class="modal" id="purchaseModal">
+        <div class="modal-content">
+            <button class="close-button" onclick="closePurchaseModal()">×</button>
+            <h2 id="purchaseModalTitle">Detail Pembelian</h2>
+
+            <div class="purchase-form">
+                <div class="product-info">
+                    <h3 id="selectedProductName"></h3>
+                    <p id="selectedProductPrice"></p>
+                </div>
+
+                <div class="form-group">
+                    <label for="customerName">Nama Lengkap *</label>
+                    <input type="text" id="customerName" placeholder="Masukkan nama lengkap" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="customerContact">WhatsApp/Telegram *</label>
+                    <input type="text" id="customerContact" placeholder="08xxxxxxxxxx atau @username" required>
+                </div>
+
+                <div class="form-group" id="accountInfoGroup" style="display: none;">
+                    <label for="accountInfo">Username/Link Akun *</label>
+                    <input type="text" id="accountInfo" placeholder="@username atau link profil">
+                    <small>Untuk layanan followers/bug, masukkan username atau link akun target</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="customerNotes">Catatan Tambahan</label>
+                    <textarea id="customerNotes" placeholder="Catatan khusus untuk pesanan (opsional)" rows="3"></textarea>
+                </div>
+
+                <button class="btn-primary" onclick="processPurchase()">
+                    <span>Lanjut ke Pembayaran</span>
+                    <span class="btn-arrow">→</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-content">
+            <button class="close-button" onclick="closeModal()">×</button>
+            <h2 id="modalTitle">Proses Pembayaran QRIS</h2>
+
+            <div id="paymentLoading" class="loading-container">
+                <div class="loading-spinner"></div>
+                <p>Memproses pembayaran...</p>
+            </div>
+
+            <div class="qr-container" style="display: none;" id="qrContent">
+                <div class="qr-header">
+                    <h3>Scan QR Code</h3>
+                    <p>Gunakan aplikasi mobile banking atau e-wallet Anda</p>
+                </div>
+
+                <div class="qr-image-container">
+                    <img id="qrCodeImage" src="/placeholder.svg" alt="QRIS Code" />
+                </div>
+
+                <div class="transaction-info">
+                    <div class="info-item" id="transactionIdText" style="display: none;">
+                        <span class="info-label">ID Transaksi:</span>
+                        <span class="info-value" id="transactionIdDisplay"></span>
+                    </div>
+                    <div class="info-item" id="paymentStatusText" style="display: none;">
+                        <span class="info-label">Status Pembayaran:</span>
+                        <span class="info-value" id="paymentStatusResult">Menunggu...</span>
+                    </div>
+                    <div class="info-item" id="serviceStatusText" style="display: none;">
+                        <span class="info-label">Status Layanan:</span>
+                        <span class="info-value" id="serviceStatusResult">Belum dimulai</span>
+                    </div>
+                </div>
+
+                <button id="cancelPaymentButton" class="btn-secondary" onclick="cancelPayment()" style="display: none;">
+                    Batalkan Pembayaran
+                </button>
+            </div>
+
+            <div id="finalContent" class="success-content" style="display: none;">
+                <div class="success-icon">🎉</div>
+                <h3>Pembayaran Berhasil!</h3>
+                <p>Pesanan Anda sedang diproses</p>
+
+                <div class="order-status">
+                    <div class="status-item">
+                        <span class="status-icon">✅</span>
+                        <span>Pembayaran Berhasil</span>
+                    </div>
+                    <div class="status-item pending">
+                        <span class="status-icon">⏳</span>
+                        <span>Sedang Diproses</span>
+                    </div>
+                    <div class="status-item pending">
+                        <span class="status-icon">📦</span>
+                        <span>Menunggu Selesai</span>
+                    </div>
+                </div>
+
+                <div class="transaction-final">
+                    <p>ID Transaksi Anda:</p>
+                    <span id="finalTransactionIdDisplay"></span>
+                    <p><small>Simpan ID ini untuk cek status pesanan</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Check Status Modal -->
+    <div class="modal" id="checkStatusModal">
+        <div class="modal-content">
+            <button class="close-button" onclick="closeCheckStatusModal()">×</button>
+            <h2>Cek Status Pesanan</h2>
+            <p>Masukkan ID Transaksi untuk memeriksa status pesanan Anda</p>
+
+            <div class="input-group">
+                <input type="text" id="inputTransactionIdCheck" placeholder="Masukkan ID Transaksi" class="form-input" />
+                <button class="btn-primary" onclick="checkOrderStatus()">Cek Status</button>
+            </div>
+
+            <div id="orderStatusResult" class="status-result"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
