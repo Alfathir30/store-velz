@@ -206,6 +206,10 @@ ${
           { text: "⚙️ Mulai Proses", callback_data: `process_${transactionId}` },
           { text: "✅ Selesai", callback_data: `complete_${transactionId}` },
         ],
+        [
+          { text: "📋 Copy Username", callback_data: `copy_username_${transactionId}` },
+          { text: "📞 Copy Kontak", callback_data: `copy_contact_${transactionId}` },
+        ],
         [{ text: "❌ Ada Masalah", callback_data: `cancel_${transactionId}` }],
       ],
     }
@@ -240,3 +244,4 @@ ${
     return false
   }
 }
+
