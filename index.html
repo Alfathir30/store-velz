@@ -85,16 +85,7 @@
                     
                     <div class="input-group">
                         <label>Jumlah Followers:</label>
-                        <input type="number" id="followersAmount" min="100" max="100000" step="100" value="1000" oninput="calculatePrice()">
-                        <div class="slider-container">
-                            <input type="range" id="followersSlider" min="100" max="100000" step="100" value="1000" oninput="syncSlider()">
-                        </div>
-                    </div>
-                    
-                    <div class="price-display">
-                        <div class="price-label">Estimasi Harga:</div>
-                        <div class="price-value" id="calculatedPrice">Rp 15.000</div>
-                    </div>
+                        <input type="number" id="followersAmount" min="20" max="100000" step="100" value="1000" oninput="calculatePrice()">
                     
                     <button class="btn-primary" onclick="buyFollowers()">
                         <span>Beli Sekarang</span>
