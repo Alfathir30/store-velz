@@ -114,6 +114,7 @@
             <button class="btn" onclick="testTelegramBot()">Test Telegram Bot</button>
             <button class="btn" onclick="testOrderNotification()">Test Order Notification</button>
             <button class="btn" onclick="checkEnvironmentVars()">Check Environment Variables</button>
+            <button class="btn" onclick="setupWebhook()">Setup Webhook</button>
             
             <div id="testResult" class="result" style="display: none;"></div>
         </div>
@@ -259,6 +260,26 @@
 
         function checkEnvironmentVars() {
             showResult('Environment variables akan dicek di server logs.\n\nCek Netlify Functions logs untuk melihat status TELEGRAM_BOT_TOKEN dan TELEGRAM_CHAT_ID.', 'info');
+        }
+
+        async function setupWebhook() {
+            showResult('Setting up Telegram webhook...', 'loading');
+            
+            try {
+                const response = await fetch('/.netlify/functions/setup-webhook', {
+                    method: 'POST'
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    showResult(`✅ Webhook berhasil di-setup!\n\nWebhook URL: ${data.webhook_url}\n\nSekarang tombol Telegram akan berfungsi.`, 'success');
+                } else {
+                    showResult(`❌ Setup webhook gagal:\n\n${JSON.stringify(data, null, 2)}`, 'error');
+                }
+            } catch (error) {
+                showResult(`❌ Error: ${error.message}`, 'error');
+            }
         }
     </script>
 </body>
