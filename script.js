@@ -58,31 +58,31 @@ const productDatabase = {
       badge: "Pro",
     },
   ],
-  "jasa-bug": [
+  "Bug-Wa": [
     {
-      id: "bug-shopee",
-      name: "Bug Shopee Coins",
-      description: "Exploit bug untuk mendapatkan Shopee Coins gratis dengan aman",
-      price: 50000,
-      features: ["Safe Method", "Step by Step", "Video Tutorial", "24/7 Support"],
-      icon: "🛒",
+      id: "crash-andro",
+      name: "Bug Carsh Wa Android",
+      description: "Membuat Wa Target Crash",
+      price: 10000,
+      features: ["Tidak Bisa Buka Wa", "Ceklis 1"],
+      icon: "🤖",
       badge: "Hot",
     },
     {
-      id: "bug-dana",
-      name: "Bug Dana Cashback",
-      description: "Metode bug untuk mendapatkan cashback Dana dengan teknik terbaru",
-      price: 75000,
-      features: ["Latest Method", "High Success Rate", "Detailed Guide", "Backup Methods"],
-      icon: "💰",
+      id: "Crash-ios",
+      name: "Bug Crash Ios Ivisible",
+      description: "Membuat Wa Target Crash",
+      price: 15000,
+      features: ["Tidak Bisa Buka Wa", "Ceklis 1"],
+      icon: "",
       badge: "Eksklusif",
     },
     {
-      id: "bug-gojek",
-      name: "Bug Gojek Voucher",
-      description: "Cara mendapatkan voucher Gojek gratis melalui bug aplikasi",
+      id: "Delay-invis",
+      name: "Delay Invisible",
+      description: "Membuat Wa Target Delay",
       price: 500,
-      features: ["Multiple Vouchers", "Easy Steps", "Video Guide", "Success Guarantee"],
+      features: ["Kirim Chat Delay", "Nguras Paket Data"],
       icon: "🏍️",
       badge: "Terbaru",
     },
@@ -168,7 +168,7 @@ function filterProducts(category) {
           ? "E-Book Premium"
           : category === "apk"
             ? "APK Premium"
-            : category === "jasa-bug"
+            : category === "Bug-Wa"
               ? "Jasa Bug Terpercaya"
               : "Produk Terbaik"
   }
