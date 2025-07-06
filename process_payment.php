@@ -19,6 +19,7 @@ $secretProductLinks = [
     'Ebook JavaScript'    => 'https://t.me/L1nk3b00kJSRahasia',
     'Akses Grup Telegram' => 'https://t.me/L1nkGr0upT3l3gr4mRahasia',
     'Mentoring 1-on-1'    => 'https://wa.me/6281234567890?text=Halo%20saya%20mau%20mentoring%201-on-1-Rahasia',
+    'MurBug'              => 'https://t.me/+4Ao1jvs2YzMxMzk9'
     // Tambahkan produk lain di sini jika ada, pastikan nama produk sama persis
 ];
 
