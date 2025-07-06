@@ -132,7 +132,7 @@ const productDatabase = {
     {
       id: "surxrat",
       name: "Surxrat Private",
-      description: "Kontrol perangkat Android dari jarak jauh dengan fitur lengkap dan keamanan terjamin",
+      description: "Kontrol perangkat Android dari jarak jauh dengan fitur lengkap dan keamanan terjamin Support Sampai Android 15",
       price: 35000,
       features: ["Melihat sms lama korban", "Melihat daftar kontak yang di-save korban", "Melihat riwayat panggilan telepon yang dilakukan oleh korban", "Memantau status sistem, seperti penggunaan CPU, memori, dan baterai", "Hasil rekaman suara saat korban menginstal aplikasi", "Melihat semua email/gmail korban", "Melihat semua sms terbaru di korban kalian bisa mengunakannya untuk login ke akun WhatsApp, Telegram, Facebook, Dll (Ambil akun korban melalui otp)", "Menghapus semua file di perangkat korban", "Play Musik", "dll"],
       icon: "📸",
