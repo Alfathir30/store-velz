@@ -92,7 +92,7 @@ const productDatabase = {
       description: "Dapat Akses Bot Bug Telegram TREDICT INVICTUS",
       price: 20000,
       features: ["Tinggal Pakai"],
-      icon: "</>",
+      icon: "👨‍🎓",
       badge: "Terbaru",
     }
   ],
