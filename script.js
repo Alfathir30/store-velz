@@ -91,7 +91,7 @@ const productDatabase = {
       name: "Murid Bug",
       description: "Dapat Akses Bot Bug Telegram TREDICT INVICTUS",
       price: 20000,
-      features: ["Tinggal Pakai"],
+      features: ["Tinggal Pakai", "Bug Sepuasnya"],
       icon: "👨‍🎓",
       badge: "Terbaru",
     }
