@@ -81,7 +81,7 @@ const productDatabase = {
       id: "bug-gojek",
       name: "Bug Gojek Voucher",
       description: "Cara mendapatkan voucher Gojek gratis melalui bug aplikasi",
-      price: 200,
+      price: 500,
       features: ["Multiple Vouchers", "Easy Steps", "Video Guide", "Success Guarantee"],
       icon: "🏍️",
       badge: "Terbaru",
