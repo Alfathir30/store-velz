@@ -7,7 +7,7 @@
 header('Content-Type: application/json');
 
 // ====== CONFIG ======
-define('ATLANTIC_API_KEY', 'API_KEY_KAMU_DISINI'); 
+define('ATLANTIC_API_KEY', 'Q7v5cdl2cSqMGLiOX0cay9Hl9DPJOhgPt5kRSQ55eThR8HcxWBDnvjwn4Hjf2eDChFVGFQCX9EvY2PHHafdQzyp08RDDYYKPYdML'); 
 define('ATLANTIC_API_URL', 'https://atlantich2h.com');
 
 // ====== VALIDASI INPUT ======
