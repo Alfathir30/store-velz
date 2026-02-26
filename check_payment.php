@@ -3,7 +3,7 @@
 header('Content-Type: application/json');
 
 // --- PENTING! GANTI 'YOUR_ATLANTIC_API_KEY_HERE' dengan API KEY ASLI LO ---
-define('ATLANTIC_API_KEY', 'atIjCYZqOkNwQf379v0gmmdSpzfJUvHBMW93oQ9dxBqCjilCzvbqGhrn11BRVo3bkceD9adBMXHpt6tC3oWisS3j710deVVbctk1'); 
+define('ATLANTIC_API_KEY', 'Q7v5cdl2cSqMGLiOX0cay9Hl9DPJOhgPt5kRSQ55eThR8HcxWBDnvjwn4Hjf2eDChFVGFQCX9EvY2PHHafdQzyp08RDDYYKPYdML'); 
 define('ATLANTIC_API_URL', 'https://atlantich2h.com');
 
 // --- FIREBASE REALTIME DATABASE CONFIG ---
